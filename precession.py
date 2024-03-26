@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 from numpy import array, sin, cos, sqrt, append
-from numba import jit
+
 import math
 
 __version__ = "1.1.0"
@@ -15,7 +15,6 @@ AS2R = 4.848136811095359935899141e-6
 EPS0 = 84381.406 * AS2R
 
 
-@jit
 def ltp_pecl(T):
     """Long-term precession of the ecliptic
 
@@ -99,7 +98,6 @@ def ltp_pecl(T):
     return vec
 
 
-@jit
 def ltp_pequ(T):
     """Long-term precession of the equator
 
@@ -183,7 +181,6 @@ def ltp_pequ(T):
     return veq
 
 
-@jit
 def pxp(a, b):
     """p-vector outer (=vector=cross) product.
 
@@ -204,7 +201,6 @@ def pxp(a, b):
     return axb
 
 
-@jit
 def pn(p):
     """Convert a p-vector into modulus and unit vector.
 
@@ -232,7 +228,6 @@ def pn(p):
     return r, u
 
 
-@jit
 def pdp(a, b):
     """p-vector inner (=scalar=dot) product.
 
@@ -252,7 +247,6 @@ def pdp(a, b):
     return adb
 
 
-@jit
 def precessionMx(T):
     """Long-term precession matrix
 
@@ -295,7 +289,6 @@ def precessionMx(T):
 # print(ltp_pmat(1000))
 
 
-@jit
 def ra_dec(v):
     """Convert a cartesian position matrix to RA and Dec"""
     x = v[0][0]

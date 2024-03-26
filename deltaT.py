@@ -540,7 +540,9 @@ def DeltaT(y):
         )
 
 
-# print(DeltaT(-1024))
+# print(DeltaT(2022))
+
+
 def DeltaT_error_estimate(y):
     """
     Estimate the error of Delta T based on the tables in http://astro.ukho.gov.uk/nao/lvm/
@@ -569,6 +571,9 @@ def DeltaT_error_estimate(y):
                 k2 * (y - 1875) ** 2,
             ),
         )
+
+
+print(DeltaT_error_estimate(-820))
 
 
 def DeltaT_with_error_estimate(y):

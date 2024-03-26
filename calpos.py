@@ -5,8 +5,8 @@
 # from skyfield.api import N, S, E, W, load, wgs84
 from jplephem.spk import SPK
 import numpy as np
-from numba import jit
-from math import asin, atan2, cos, floor, sin, sqrt
+
+from math import atan2, cos, sin, sqrt
 from nutation import nutaMx
 from precession import precessionMx
 
@@ -67,7 +67,6 @@ MMS2R = 4.848136811095359935899141e-13
 c = 299792.458
 
 
-@jit
 def cal(a, b, jd):
     position, velocity = kernel[a, b].compute_and_differentiate(jd)
     return {"X": position, "V": velocity}
@@ -94,16 +93,6 @@ def cal(a, b, jd):
 # print(cal(0,10,2344211))
 # 輸出的位置[x,y,z]爲ICRS，單位都是km。J2000地球平赤道面为平面，J2000平春分点方向为方向的直角坐标系。
 
-Planets = {
-    "Sun": 10,
-    "Mars": 4,
-    "Jupiter": 5,
-    "Saturn": 6,
-    "Mercury": 199,
-    "MercuryBary": 1,
-    "Venus": 299,
-    "VenusBary": 2,
-}
 
 B = np.array(
     [
@@ -115,8 +104,19 @@ B = np.array(
 
 
 # 與VSOP驗算無誤。VSOP的x軸與DE完全一致，只差了幾十公里，但是y、z軸都不一樣，就是黃道赤道的區別。
-@jit
+
+
 def calXV(Name, jd):
+    Planets = {
+        "Sun": 10,
+        "Mars": 4,
+        "Jupiter": 5,
+        "Saturn": 6,
+        "Mercury": 199,
+        "MercuryBary": 1,
+        "Venus": 299,
+        "VenusBary": 2,
+    }
     if Name == "Sun" or Name == "Mars" or Name == "Jupiter" or Name == "Saturn":
         SB_S = cal(0, Planets[Name], jd)
         SB_EB = cal(0, 3, jd)
@@ -138,7 +138,6 @@ def calXV(Name, jd):
     return X, V
 
 
-@jit
 def calPos(Name, Jd):
     def x2LonLat(X):
         Lon = atan2(X[1], X[0])

@@ -1,6 +1,6 @@
 from math import cos, floor, sin
 import numpy as np
-from numba import jit
+
 from nutation_list import nals_t, cls_t, napl_t, cpl_t
 
 
@@ -10,7 +10,6 @@ MMS2R = 4.848136811095359935899141e-13
 c = 299792.458
 
 
-@jit
 def nutaMx(T):
     def fmod(X, m):
         return X - floor(X / m) * m
