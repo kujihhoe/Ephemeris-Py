@@ -1,36 +1,32 @@
 # -*- coding: utf-8 -*-
 from numpy import array, sin, cos, sqrt, append
-
 import math
 
-__version__ = "1.1.0"
+__version__ = 0.03
 
 # 2Pi
-TAU = 6.283185307179586476925287e0
+tau = 6.283185307179586476925287e0
 
 # Arcseconds to radians
-AS2R = 4.848136811095359935899141e-6
+as2r = 4.848136811095359935899141e-6
 
 # Obliquity at J2000.0 (radians)
-EPS0 = 84381.406 * AS2R
+eps0 = 84381.406 * as2r
 
 
-def ltp_pecl(T):
+def ltp_PECL(T):
     """Long-term precession of the ecliptic
 
     Given Julian epoch (TT).
 
     Return ecliptic pole unit vector.
 
-    ``ltp_pecl`` generates the unit vector for the pole of the ecliptic, using
-    the series for Pₐ, Qₐ. The vector is with respect to the J2000.0 mean
-    equator and equinox.
+    ``ltp_PECL`` generates the unit vector for the pole of the ecliptic, using the series for Pₐ, Qₐ. The vector is with respect to the J2000.0 mean equator and equinox.
     """
 
     # There is a typographical error in the original coefficient
     # C₇ for Qₐ should read 198.296701 instead of 198.296071
-    # Src:
-    # http://www.aanda.org/articles/aa/abs/2012/05/aa17274e-11/aa17274e-11.html
+    # Src: http://www.aanda.org/articles/aa/abs/2012/05/aa17274e-11/aa17274e-11.html
 
     # Number of polynomial and periodic coefficients
     npol = 4
@@ -55,8 +51,13 @@ def ltp_pecl(T):
             [492.20, 413.442940, -356.652376, 376.202861, 421.535876],
             [1183.00, 78.614193, -186.387003, 184.778874, -36.776172],
             [622.00, -180.732815, -316.800070, 335.321713, -145.278396],
-            # corrected coefficient per erratum
-            [882.00, -87.676083, 198.296701, -185.138669, -34.744450],
+            [
+                882.00,
+                -87.676083,
+                198.296701,
+                -185.138669,
+                -34.744450,
+            ],  # corrected coefficient per erratum
             [547.00, 46.140315, 101.135679, -120.972830, 22.885731],
         ]
     )
@@ -69,7 +70,7 @@ def ltp_pecl(T):
 
     # Periodic Terms
     for i in range(0, nper):
-        W = TAU * T
+        W = tau * T
         A = W / pqper[i][0]
         S = sin(A)
         C = cos(A)
@@ -84,13 +85,13 @@ def ltp_pecl(T):
         W = W * T
 
     # Pₐ and Qₐ (radians)
-    P = P * AS2R
-    Q = Q * AS2R
+    P = P * as2r
+    Q = Q * as2r
 
     # Form the ecliptic pole vector
     Z = sqrt(max(1.0 - P * P - Q * Q, 0.0))
-    S = sin(EPS0)
-    C = cos(EPS0)
+    S = sin(eps0)
+    C = cos(eps0)
     vec0 = P
     vec1 = -Q * C - Z * S
     vec2 = -Q * S + Z * C
@@ -98,16 +99,14 @@ def ltp_pecl(T):
     return vec
 
 
-def ltp_pequ(T):
+def ltp_PEQU(T):
     """Long-term precession of the equator
 
     Given Julian epoch (TT)
 
     Return equator pole unit vector
 
-    ``ltp_pequ`` generates the unit vector for the pole of the equator, using
-    the series for Xₐ, Yₐ. The vector is with respect to the J2000.0 mean
-    equator and equinox.
+    ``ltp_PEQU`` generates the unit vector for the pole of the equator, using the series for Xₐ, Yₐ. The vector is with respect to the J2000.0 mean equator and equinox.
     """
 
     # Number of polynomial and periodic coefficients
@@ -128,7 +127,13 @@ def ltp_pequ(T):
     xyper = array(
         [
             [256.75, -819.940624, 75004.344875, 81491.287984, 1558.515853],
-            [708.15, -8444.676815, 624.033993, 787.163481, 7774.939698],
+            [
+                708.15,
+                -8444.676815,
+                624.033993,
+                787.163481,
+                7774.939698,
+            ],
             [274.20, 2600.009459, 1251.136893, 1251.296102, -2219.534038],
             [241.45, 2755.175630, -1102.212834, -1257.950837, -2523.969396],
             [2309.00, -167.659835, -2660.664980, -2966.799730, 247.850422],
@@ -152,7 +157,7 @@ def ltp_pequ(T):
 
     # Periodic Terms
     for i in range(0, nper):
-        W = TAU * T
+        W = tau * T
         A = W / xyper[i][0]
         S = sin(A)
         C = cos(A)
@@ -167,8 +172,8 @@ def ltp_pequ(T):
         W = W * T
 
     # X and Y (direction cosines)
-    X = X * AS2R
-    Y = Y * AS2R
+    X = X * as2r
+    Y = Y * as2r
 
     # Form the equator pole vector
     veq0 = X
@@ -233,8 +238,7 @@ def pdp(a, b):
 
     Given two p-vectors (a and b)
 
-    Return a * b
-    """
+    Return a * b"""
 
     # this is akin to the SOFA iauPdp, but it handles 3x3 square
     # matrices times (dot) column vectors 3x1
@@ -254,23 +258,22 @@ def precessionMx(T):
 
     Return precession matrix, J2000.0 to date
 
-    ``ltp_pmat`` generates the 3 × 3 rotation matrix **P**, constructed using
-    Fabri parameterization (i.e. directly from the unit vectors for the
-    ecliptic and equator poles). The resulting matrix transforms vectors with
-    respect to the mean equator and equinox of epoch 2000.0 into mean place of
-    date.
+    ``ltp_PMAT`` generates the 3 × 3 rotation matrix **P**, constructed using
+    Fabri parameterization (i.e. directly from the unit vectors for the ecliptic
+    and equator poles). The resulting matrix transforms vectors with respect to
+    the mean equator and equinox of epoch 2000.0 into mean place of date.
 
-    The matrix is in the sense ``P_date = RP x P_J2000``, where ``P_J2000`` is
-    a vector with respect to the J2000.0 mean equator and equinox and
-    ``P_date`` is the same vector with respect to the equator and equinox of
-    epoch EPJ.
+    The matrix is in the sense ``P_date = RP x P_J2000``,
+    where ``P_J2000`` is a vector with respect to the J2000.0 mean
+    equator and equinox and ``P_date`` is the same vector with respect to
+    the equator and equinox of epoch EPJ.
     """
 
     # Equator pole (bottom row of matrix)
-    peqr = ltp_pequ(T)
+    peqr = ltp_PEQU(T)
 
     # Ecliptic pole
-    pecl = ltp_pecl(T)
+    pecl = ltp_PECL(T)
 
     # Equinox (top row of matrix)
     V = pxp(peqr, pecl)  # P-vector outer product.
@@ -284,9 +287,6 @@ def precessionMx(T):
     rp = append(rp, [EQX, V, peqr])
     rp = rp.reshape(3, 3)
     return rp
-
-
-# print(ltp_pmat(1000))
 
 
 def ra_dec(v):
