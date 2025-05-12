@@ -573,7 +573,7 @@ def DeltaT_error_estimate(y):
         )
 
 
-print(DeltaT_error_estimate(-820))
+# print(DeltaT_error_estimate(-820))
 
 
 def DeltaT_with_error_estimate(y):

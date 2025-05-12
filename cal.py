@@ -30,9 +30,11 @@ def calNewm(Y, Range, isNewm):
         def delta(Jd):
             Sun = calPos("Sun", Jd)
             Moon = calPos("Moon", Jd)
-            a = Sun[0] - Moon[0] - (0 if isNewm else pi)
+            a = Sun[0] - Moon[0] - (0 if isNewm else pi)            
             b = Moon[2] - Sun[2]
-            if a < -7 / 4 * pi:
+            if a > pi:
+                a -= pi2
+            if a < -pi:
                 a += pi2
             return a / b
 
@@ -42,7 +44,7 @@ def calNewm(Y, Range, isNewm):
             AcrJd[i] += D
             D = delta(AcrJd[i])
     np.savetxt("./newm.txt", AcrJd, fmt="%.8f", newline=", ")
-    # return AcrJd
+    return AcrJd
 
 
 def calTerm(Y, Range, isTerm):
@@ -71,4 +73,4 @@ def calTerm(Y, Range, isTerm):
     # return AcrJd
 
 
-print(calTerm(-2505, 100, False))
+print(calNewm(-676, 5, True))

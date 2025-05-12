@@ -11,7 +11,7 @@ from nutation import nutaMx
 from precession import precessionMx
 
 # print(inspect.getfile(SPK))
-kernel = SPK.open("/Volumes/Pickman Ebooks/历表/DE/de441_1.bsp")
+kernel = SPK.open("/Volumes/Pickman Ebooks/專書曆算/历表/DE/de441_1.bsp")
 # # 使用[:, 1]来获取第二列的所有元素（索引从0开始，所以1表示第二列）
 # column = matrix[:, 1]
 # [2 5 8]
@@ -71,6 +71,8 @@ def cal(a, b, jd):
     position, velocity = kernel[a, b].compute_and_differentiate(jd)
     return {"X": position, "V": velocity}
 
+
+# print(cal(0, 10, 242111))
 
 # def convert_to_array(numbers_str):
 #     # 将字符串分割并转换为整数列表
@@ -178,4 +180,4 @@ def calPos(Name, Jd):
     return Lon, Lat, Lon1, EquaLon, EquaLat
 
 
-# print(calPos("Sun", 2433133))
+# print(calPos("Sun", 1433133))
