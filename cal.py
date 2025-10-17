@@ -32,20 +32,24 @@ def calNewm(Y, Range, isNewm):
             Moon = calPos("Moon", Jd)
             a = Sun[0] - Moon[0] - (0 if isNewm else pi)            
             b = Moon[2] - Sun[2]
-            if a > pi:
+            if a > .8 * pi:
                 a -= pi2
-            if a < -pi:
+            elif a < -.8 * pi:
                 a += pi2
             return a / b
-
+# syzygy：只有a<-pi的情况
+# S 6    6     3    3.2   0.2  0.2   
+# M 3    3.2    6    6     3    3.2
+# a 3    2.8   -3   -2.8  -2.8  -3
+#   -pi
+# r -.1 -.3    -6.1 -5.9  
         D = delta(AvgJd)
         AcrJd[i] = AvgJd
         while abs(D) > 1e-8:
             AcrJd[i] += D
             D = delta(AcrJd[i])
-    np.savetxt("./newm.txt", AcrJd, fmt="%.8f", newline=", ")
-    return AcrJd
-
+    np.savetxt("../newm_2.txt", AcrJd, fmt="%.8f", newline=", ")
+    # return AcrJd
 
 def calTerm(Y, Range, isTerm):
     OriginAccum = (Y - CloseOriginAd) * Solar
@@ -69,8 +73,10 @@ def calTerm(Y, Range, isTerm):
         while abs(D) > 1e-8:
             AcrTermJd[i] += D
             D = delta(AcrTermJd[i])
-    np.savetxt("./term1_plus.txt", AcrTermJd, fmt="%.8f", newline=", ")
+    np.savetxt("term1_plus.txt", AcrTermJd, fmt="%.8f", newline=", ")
     # return AcrJd
 
 
-print(calNewm(-676, 5, True))
+print(calNewm(1600, 11140, True))
+# print(calTerm(-676, 5, True))
+

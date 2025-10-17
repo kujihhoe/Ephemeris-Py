@@ -11,7 +11,7 @@ from nutation import nutaMx
 from precession import precessionMx
 
 # print(inspect.getfile(SPK))
-kernel = SPK.open("/Volumes/Pickman Ebooks/專書曆算/历表/DE/de441_1.bsp")
+kernel = SPK.open("/Volumes/Pickman Ebooks/專書曆算/历表/DE/de440.bsp")
 # # 使用[:, 1]来获取第二列的所有元素（索引从0开始，所以1表示第二列）
 # column = matrix[:, 1]
 # [2 5 8]
